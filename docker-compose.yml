@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  ruby:
+    image: ruby
+    volumes:
+      - .:/workspace
+      - gem-data:/usr/local/bundle
+    working_dir: /workspace
+
+volumes:
+  gem-data:
