@@ -20,10 +20,10 @@ module Mogu
       args = [
         "new",
         app_path,
-        database.empty? ? "" : "-d #{database}",
-        javascript.empty? ? "" : "-j #{javascript}",
-        css.empty? ? "" : "-c #{css}",
-      ].reject(&:empty?)
+        database.empty? ? [] : ["-d", database],
+        javascript.empty? ? [] : ["-j", javascript],
+        css.empty? ? [] : ["-c", css]
+      ].flatten
 
       Rails::Command.invoke :application, args
     end
