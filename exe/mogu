@@ -1,3 +1,9 @@
 #!/usr/bin/env ruby
 
 require "mogu"
+
+begin
+  Mogu::CLI.new.start
+rescue Interrupt
+  puts
+end
