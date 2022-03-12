@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "rails/command"
 require "tty-prompt"
 
 module Mogu
@@ -24,7 +25,7 @@ module Mogu
         css.empty? ? "" : "-c #{css}",
       ].reject(&:empty?)
 
-      system "rails #{args.join " "}"
+      Rails::Command.invoke :application, args
     end
 
     private
