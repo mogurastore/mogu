@@ -5,7 +5,7 @@ require_relative "lib/mogu/version"
 Gem::Specification.new do |spec|
   spec.name          = "mogu"
   spec.version       = Mogu::VERSION
-  spec.authors       = %w(lisp719)
+  spec.authors       = %w(MoguraStore)
   spec.email         = %w(368034+lisp719@users.noreply.github.com)
 
   spec.summary       = "CLI to create rails projects interactively."
