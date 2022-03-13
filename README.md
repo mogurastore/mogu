@@ -1,5 +1,11 @@
 # Mogu
 
+CLI to create rails projects interactively.
+
+## Features
+
+- Support for rails new option selection.
+
 ## Installation
 
 ```bash
