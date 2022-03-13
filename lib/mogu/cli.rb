@@ -7,68 +7,56 @@ module Mogu
   class CLI
     attr_reader :prompt
 
-    def start
+    def initialize
       @prompt = TTY::Prompt.new
+    end
 
-      app_path = prompt.ask('Please input app path', required: true)
+    def start
+      app_path = prompt_app_path
+      customizes = prompt_customizes
+      args = build_args(customizes)
 
-      customizes = choose_customizes
-      database = customizes.include?('database') ? choose_database : ''
-      javascript = customizes.include?('javascript') ? choose_javascript : ''
-      css = customizes.include?('css') ? choose_css : ''
-
-      args = [
-        'new',
-        app_path,
-        database.empty? ? [] : ['-d', database],
-        javascript.empty? ? [] : ['-j', javascript],
-        css.empty? ? [] : ['-c', css]
-      ].flatten
-
-      Rails::Command.invoke :application, args
+      Rails::Command.invoke :application, ['new', app_path, *args]
     end
 
     private
 
-    def choose_customizes
-      prompt.multi_select 'Choose customizes' do |menu|
-        menu.choice 'database'
-        menu.choice 'javascript'
-        menu.choice 'css'
+    def prompt_app_path
+      prompt.ask 'Please input app path', required: true
+    end
+
+    def prompt_customizes
+      choices = %w[database javascript css]
+
+      prompt.multi_select 'Choose customizes', choices
+    end
+
+    def build_args(customizes)
+      @args = customizes.flat_map do |customize|
+        case customize
+        when 'database' then ['-d', prompt_database]
+        when 'javascript' then ['-j', prompt_javascript]
+        when 'css' then ['-c', prompt_css]
+        end
       end
     end
 
-    def choose_database
-      prompt.select 'Choose database' do |menu|
-        menu.choice 'sqlite3'
-        menu.choice 'mysql'
-        menu.choice 'postgresql'
-        menu.choice 'oracle'
-        menu.choice 'sqlserver'
-        menu.choice 'jdbcmysql'
-        menu.choice 'jdbcsqlite3'
-        menu.choice 'jdbcpostgresql'
-        menu.choice 'jdbc'
-      end
+    def prompt_database
+      choices = %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
+
+      prompt.select 'Choose database', choices
     end
 
-    def choose_javascript
-      prompt.select 'Choose javascript' do |menu|
-        menu.choice 'importmap'
-        menu.choice 'webpack'
-        menu.choice 'esbuild'
-        menu.choice 'rollup'
-      end
+    def prompt_javascript
+      choices = %w[importmap webpack esbuild rollup]
+
+      prompt.select 'Choose javascript', choices
     end
 
-    def choose_css
-      prompt.select 'Choose css' do |menu|
-        menu.choice 'tailwind'
-        menu.choice 'bootstrap'
-        menu.choice 'bulma'
-        menu.choice 'postcss'
-        menu.choice 'sass'
-      end
+    def prompt_css
+      choices = %w[tailwind bootstrap bulma postcss sass]
+
+      prompt.select 'Choose css', choices
     end
   end
 end
