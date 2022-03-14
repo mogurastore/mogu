@@ -32,7 +32,7 @@ module Mogu
     end
 
     def build_args(customizes)
-      @args = customizes.flat_map do |customize|
+      customizes.flat_map do |customize|
         case customize
         when 'database' then ['-d', prompt_database]
         when 'javascript' then ['-j', prompt_javascript]
