@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'mogu/prompt'
 require 'rails/command'
 
 module Mogu
