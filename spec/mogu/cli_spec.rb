@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'mogu/cli'
-
 RSpec.describe Mogu::CLI do
   describe '#start' do
     subject { described_class.new }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'mogu/prompt'
-
 RSpec.describe Mogu::Prompt do
   subject { described_class.new }
 
