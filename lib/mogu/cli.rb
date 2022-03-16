@@ -26,6 +26,17 @@ module Mogu
         when 'database' then ['-d', prompt.database]
         when 'javascript' then ['-j', prompt.javascript]
         when 'css' then ['-c', prompt.css]
+        when 'gems'
+          gems = prompt.gems
+
+          if gems.include? 'rspec'
+            template = Mogu::Template.new
+            template.write gems
+
+            ['-T', '-m', template.file.path]
+          else
+            []
+          end
         end
       end
     end

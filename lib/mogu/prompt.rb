@@ -21,7 +21,7 @@ module Mogu
     end
 
     def customizes
-      choices = %w[database javascript css]
+      choices = %w[database javascript css gems]
 
       prompt.multi_select 'Choose customizes', choices
     end
@@ -30,6 +30,12 @@ module Mogu
       choices = %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
 
       prompt.select 'Choose database', choices
+    end
+
+    def gems
+      choices = %w[rspec]
+
+      prompt.multi_select 'Choose gems', choices
     end
 
     def javascript

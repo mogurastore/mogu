@@ -2,6 +2,7 @@
 
 require_relative 'mogu/cli'
 require_relative 'mogu/prompt'
+require_relative 'mogu/template'
 require_relative 'mogu/version'
 
 module Mogu; end

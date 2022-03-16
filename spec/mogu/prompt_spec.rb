@@ -31,6 +31,13 @@ RSpec.describe Mogu::Prompt do
     end
   end
 
+  describe '#gems' do
+    it 'receive multi_select' do
+      expect(subject.prompt).to receive(:multi_select)
+      subject.gems
+    end
+  end
+
   describe '#javascript' do
     it 'receive select' do
       expect(subject.prompt).to receive(:select)
