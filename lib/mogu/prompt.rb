@@ -4,10 +4,60 @@ require 'tty-prompt'
 
 module Mogu
   class Prompt
-    attr_reader :prompt
+    attr_reader :prompt, :result
 
     def initialize
       @prompt = TTY::Prompt.new
+
+      result = Struct.new(:app_path, :customizes, :database, :javascript, :css, :gems, :template, keyword_init: true)
+      @result = result.new(app_path: '', customizes: [], database: '', javascript: '', css: '', gems: [], template: nil)
+    end
+
+    def run
+      result.app_path = app_path
+      result.customizes = customizes
+
+      result.database = database if database?
+      result.javascript = javascript if javascript?
+      result.css = css if css?
+      result.gems = gems if gems?
+      result.template = Mogu::Template.create result.gems if template?
+    end
+
+    def to_opt
+      [result.app_path] + [
+        database? ? ['-d', result.database] : [],
+        javascript? ? ['-j', result.javascript] : [],
+        css? ? ['-c', result.css] : [],
+        rspec? ? %w[-T] : [],
+        template? ? ['-m', result.template.file.path] : []
+      ].flatten
+    end
+
+    private
+
+    def database?
+      result.customizes.include? 'database'
+    end
+
+    def javascript?
+      result.customizes.include? 'javascript'
+    end
+
+    def css?
+      result.customizes.include? 'css'
+    end
+
+    def gems?
+      result.customizes.include? 'gems'
+    end
+
+    def rspec?
+      result.gems.include? 'rspec'
+    end
+
+    def template?
+      rspec?
     end
 
     def app_path
@@ -21,7 +71,7 @@ module Mogu
     end
 
     def customizes
-      choices = %w[database javascript css]
+      choices = %w[database javascript css gems]
 
       prompt.multi_select 'Choose customizes', choices
     end
@@ -30,6 +80,12 @@ module Mogu
       choices = %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
 
       prompt.select 'Choose database', choices
+    end
+
+    def gems
+      choices = %w[rspec]
+
+      prompt.multi_select 'Choose gems', choices
     end
 
     def javascript

@@ -4,29 +4,12 @@ require 'rails/command'
 
 module Mogu
   class CLI
-    attr_reader :prompt
+    class << self
+      def start
+        prompt = Mogu::Prompt.new
+        prompt.run
 
-    def initialize
-      @prompt = Mogu::Prompt.new
-    end
-
-    def start
-      app_path = prompt.app_path
-      customizes = prompt.customizes
-      args = build_args(customizes)
-
-      Rails::Command.invoke :application, ['new', app_path, *args]
-    end
-
-    private
-
-    def build_args(customizes)
-      customizes.flat_map do |customize|
-        case customize
-        when 'database' then ['-d', prompt.database]
-        when 'javascript' then ['-j', prompt.javascript]
-        when 'css' then ['-c', prompt.css]
-        end
+        Rails::Command.invoke :application, ['new', *prompt.to_opt]
       end
     end
   end
