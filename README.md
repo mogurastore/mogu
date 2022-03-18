@@ -22,6 +22,38 @@ gem install mogu
 mogu
 ```
 
+```bash
+Please input app path
+
+Choose customizes
+> ⬡ database
+  ⬡ javascript
+  ⬡ css
+  ⬡ gems
+
+Choose database
+> sqlite3
+  mysql
+  postgresql
+  ...
+
+Choose javascript
+> importmap
+  webpack
+  esbuild
+  rollup
+
+Choose css
+> tailwind
+  bootstrap
+  bulma
+  postcss
+  sass
+
+Choose gems
+> ⬡ rspec
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
