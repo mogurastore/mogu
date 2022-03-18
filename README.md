@@ -2,6 +2,10 @@
 
 CLI to create rails projects interactively.
 
+## Prerequisites
+
+- Rails 7+
+
 ## Features
 
 - Support for rails new option selection.
