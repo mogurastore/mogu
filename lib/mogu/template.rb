@@ -6,6 +6,15 @@ module Mogu
   class Template
     attr_reader :file
 
+    class << self
+      def create(gems)
+        template = new
+        template.write gems
+
+        template
+      end
+    end
+
     def initialize
       @file = Tempfile.create
     end

@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 RSpec.describe Mogu::Template do
+  describe '.create' do
+    subject { described_class.create [] }
+
+    let(:template) { double(:template, write: nil) }
+
+    before do
+      allow(described_class).to receive(:new).and_return(template)
+    end
+
+    it { is_expected.to eq template }
+
+    it 'check method call' do
+      subject
+      expect(template).to have_received(:write)
+    end
+  end
+
   describe '#write' do
     subject { described_class.new }
 
