@@ -16,7 +16,7 @@ module Mogu
     end
 
     def initialize
-      @file = Tempfile.create
+      @file = Tempfile.new
     end
 
     def write(gems)
