@@ -2,6 +2,10 @@
 
 CLI to create rails projects interactively.
 
+## Prerequisites
+
+- Rails 7+
+
 ## Features
 
 - Support for rails new option selection.
@@ -16,6 +20,38 @@ gem install mogu
 
 ```bash
 mogu
+```
+
+```bash
+Please input app path
+
+Choose customizes
+> ⬡ database
+  ⬡ javascript
+  ⬡ css
+  ⬡ gems
+
+Choose database
+> sqlite3
+  mysql
+  postgresql
+  ...
+
+Choose javascript
+> importmap
+  webpack
+  esbuild
+  rollup
+
+Choose css
+> tailwind
+  bootstrap
+  bulma
+  postcss
+  sass
+
+Choose gems
+> ⬡ rspec
 ```
 
 ## Development
