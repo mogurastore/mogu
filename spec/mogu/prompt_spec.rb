@@ -84,5 +84,15 @@ RSpec.describe Mogu::Prompt do
 
       it { expect(subject.to_opt).to eq %w[app_path -T -m template] }
     end
+
+    context 'with rubocop' do
+      before do
+        subject.result.customizes = %w[gems]
+        subject.result.gems = %w[rubocop]
+        subject.result.template = double(:template, file: double(:file, path: 'template'))
+      end
+
+      it { expect(subject.to_opt).to eq %w[app_path -m template] }
+    end
   end
 end

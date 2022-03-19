@@ -60,8 +60,12 @@ module Mogu
       result.gems.include? 'rspec'
     end
 
+    def rubocop?
+      result.gems.include? 'rubocop'
+    end
+
     def template?
-      [brakeman?, rspec?].any?
+      [brakeman?, rspec?, rubocop?].any?
     end
 
     def app_path
@@ -87,7 +91,7 @@ module Mogu
     end
 
     def gems
-      choices = %w[brakeman rspec]
+      choices = %w[brakeman rspec rubocop]
 
       prompt.multi_select 'Choose gems', choices
     end

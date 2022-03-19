@@ -42,5 +42,11 @@ RSpec.describe Mogu::Template do
 
       it { expect(subject).to receive(:rspec_code) }
     end
+
+    context 'when gems include rubocop' do
+      let(:gems) { ['rubocop'] }
+
+      it { expect(subject).to receive(:rubocop_code) }
+    end
   end
 end
