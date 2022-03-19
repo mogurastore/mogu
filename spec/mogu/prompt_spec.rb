@@ -12,7 +12,7 @@ RSpec.describe Mogu::Prompt do
       allow(subject).to receive(:database).and_return('database')
       allow(subject).to receive(:javascript).and_return('javascript')
       allow(subject).to receive(:css).and_return('css')
-      allow(subject).to receive(:gems).and_return(%w[rspec])
+      allow(subject).to receive(:gems).and_return(%w[brakeman rspec])
       allow(Mogu::Template).to receive(:create).and_return(template)
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Mogu::Prompt do
           database: 'database',
           javascript: 'javascript',
           css: 'css',
-          gems: %w[rspec],
+          gems: %w[brakeman rspec],
           template: template
         }
       end
@@ -63,6 +63,16 @@ RSpec.describe Mogu::Prompt do
       end
 
       it { expect(subject.to_opt).to eq %w[app_path -d database -j javascript -c css] }
+    end
+
+    context 'with brakeman' do
+      before do
+        subject.result.customizes = %w[gems]
+        subject.result.gems = %w[brakeman]
+        subject.result.template = double(:template, file: double(:file, path: 'template'))
+      end
+
+      it { expect(subject.to_opt).to eq %w[app_path -m template] }
     end
 
     context 'with rspec' do

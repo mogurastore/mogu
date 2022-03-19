@@ -52,12 +52,16 @@ module Mogu
       result.customizes.include? 'gems'
     end
 
+    def brakeman?
+      result.gems.include? 'brakeman'
+    end
+
     def rspec?
       result.gems.include? 'rspec'
     end
 
     def template?
-      rspec?
+      [brakeman?, rspec?].any?
     end
 
     def app_path
@@ -83,7 +87,7 @@ module Mogu
     end
 
     def gems
-      choices = %w[rspec]
+      choices = %w[brakeman rspec]
 
       prompt.multi_select 'Choose gems', choices
     end

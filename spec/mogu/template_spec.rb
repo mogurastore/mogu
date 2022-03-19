@@ -31,6 +31,12 @@ RSpec.describe Mogu::Template do
       it { expect(subject).not_to receive(:rspec_code) }
     end
 
+    context 'when gems include brakeman' do
+      let(:gems) { ['brakeman'] }
+
+      it { expect(subject).to receive(:brakeman_code) }
+    end
+
     context 'when gems include rspec' do
       let(:gems) { ['rspec'] }
 
