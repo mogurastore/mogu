@@ -20,12 +20,21 @@ module Mogu
     end
 
     def write(gems)
+      file.write brakeman_code if gems.include? 'brakeman'
       file.write rspec_code if gems.include? 'rspec'
 
       file.rewind
     end
 
     private
+
+    def brakeman_code
+      <<~CODE
+        gem_group :development do
+          gem 'brakeman'
+        end
+      CODE
+    end
 
     def rspec_code
       <<~CODE
