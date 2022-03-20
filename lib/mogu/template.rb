@@ -50,24 +50,20 @@ module Mogu
       <<~CODE
         gem 'rubocop-rails', group: :development, require: false
 
-        create_file '.rubocop.yml', #{rubocop_yml}
+        create_file '.rubocop.yml', <<~YML
+          require:
+            - rubocop-rails
+
+          AllCops:
+            NewCops: enable
+
+          Rails:
+            Enabled: true
+        YML
 
         after_bundle do
           run 'rubocop --auto-gen-config'
         end
-      CODE
-    end
-
-    def rubocop_yml
-      <<~CODE
-        require:
-          - rubocop-rails
-
-        AllCops:
-          NewCops: enable
-
-        Rails:
-          Enabled: true
       CODE
     end
   end
