@@ -51,7 +51,9 @@ Choose css
   sass
 
 Choose gems
-> ⬡ rspec
+> ⬡ brakeman
+  ⬡ rspec
+  ⬡ rubocop
 ```
 
 ## Development
