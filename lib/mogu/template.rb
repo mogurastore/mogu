@@ -22,6 +22,7 @@ module Mogu
     def write(gems)
       file.write brakeman_code if gems.include? 'brakeman'
       file.write rspec_code if gems.include? 'rspec'
+      file.write rubocop_code if gems.include? 'rubocop'
 
       file.rewind
     end
@@ -30,22 +31,43 @@ module Mogu
 
     def brakeman_code
       <<~CODE
-        gem_group :development do
-          gem 'brakeman'
-        end
+        gem 'brakeman', group: :development
       CODE
     end
 
     def rspec_code
       <<~CODE
-        gem_group :development, :test do
-          gem 'factory_bot_rails'
-          gem 'rspec-rails'
-        end
+        gem 'factory_bot_rails', group: %i[development test]
+        gem 'rspec-rails', group: %i[development test]
 
         after_bundle do
           generate 'rspec:install'
         end
+      CODE
+    end
+
+    def rubocop_code
+      <<~CODE
+        gem 'rubocop-rails', group: :development, require: false
+
+        create_file '.rubocop.yml', #{rubocop_yml}
+
+        after_bundle do
+          run 'rubocop --auto-gen-config'
+        end
+      CODE
+    end
+
+    def rubocop_yml
+      <<~CODE
+        require:
+          - rubocop-rails
+
+        AllCops:
+          NewCops: enable
+
+        Rails:
+          Enabled: true
       CODE
     end
   end
