@@ -79,7 +79,12 @@ module Mogu
     end
 
     def customizes
-      choices = %w[database javascript css gems]
+      choices = [
+        { name: 'database (Default: sqlite3)', value: 'database' },
+        { name: 'javascript (Default: importmap)', value: 'javascript' },
+        { name: 'css', value: 'css' },
+        { name: 'gems', value: 'gems' }
+      ]
 
       prompt.multi_select 'Choose customizes', choices
     end
