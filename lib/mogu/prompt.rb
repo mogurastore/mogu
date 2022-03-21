@@ -25,7 +25,8 @@ module Mogu
     end
 
     def to_opt
-      [result.app_path] + [
+      [
+        result.app_path,
         database? ? ['-d', result.database] : [],
         javascript? ? ['-j', result.javascript] : [],
         css? ? ['-c', result.css] : [],
