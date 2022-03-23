@@ -52,6 +52,7 @@ Choose css
 
 Choose gems
 > ⬡ brakeman
+  ⬡ solargraph
   ⬡ rspec
   ⬡ rubocop
 ```
