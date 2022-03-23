@@ -46,6 +46,8 @@ RSpec.describe Mogu::Prompt do
   describe '#to_opt' do
     subject { described_class.new }
 
+    let(:template) { Mogu::Template.new }
+
     before do
       subject.result.app_path = 'app_path'
     end
@@ -69,30 +71,30 @@ RSpec.describe Mogu::Prompt do
       before do
         subject.result.customizes = %w[gems]
         subject.result.gems = %w[brakeman]
-        subject.result.template = double(:template, file: double(:file, path: 'template'))
+        subject.result.template = template
       end
 
-      it { expect(subject.to_opt).to eq %w[app_path -m template] }
+      it { expect(subject.to_opt).to eq ['app_path', '-m', template.file.path] }
     end
 
     context 'with rspec' do
       before do
         subject.result.customizes = %w[gems]
         subject.result.gems = %w[rspec]
-        subject.result.template = double(:template, file: double(:file, path: 'template'))
+        subject.result.template = template
       end
 
-      it { expect(subject.to_opt).to eq %w[app_path -T -m template] }
+      it { expect(subject.to_opt).to eq ['app_path', '-T', '-m', template.file.path] }
     end
 
     context 'with rubocop' do
       before do
         subject.result.customizes = %w[gems]
         subject.result.gems = %w[rubocop]
-        subject.result.template = double(:template, file: double(:file, path: 'template'))
+        subject.result.template = template
       end
 
-      it { expect(subject.to_opt).to eq %w[app_path -m template] }
+      it { expect(subject.to_opt).to eq ['app_path', '-m', template.file.path] }
     end
   end
 end
