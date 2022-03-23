@@ -2,33 +2,47 @@
 
 RSpec.describe Mogu::Prompt do
   describe '#run' do
-    subject { described_class.new }
+    subject { tty_prompt }
 
-    before do
-      allow(subject).to receive(:database?).and_return(true)
-      allow(subject).to receive(:javascript?).and_return(true)
-      allow(subject).to receive(:css?).and_return(true)
-      allow(subject).to receive(:gems?).and_return(true)
-      allow(subject).to receive(:template?).and_return(true)
+    let(:prompt) { Mogu::Prompt.new }
+    let(:tty_prompt) { TTY::Prompt.new }
 
-      allow(subject).to receive(:app_path)
-      allow(subject).to receive(:customizes)
-      allow(subject).to receive(:database)
-      allow(subject).to receive(:javascript)
-      allow(subject).to receive(:css)
-      allow(subject).to receive(:gems)
-      allow(Mogu::Template).to receive(:create)
-
-      subject.run
+    let(:customizes) do
+      [
+        { name: 'database (Default: sqlite3)', value: 'database' },
+        { name: 'javascript (Default: importmap)', value: 'javascript' },
+        { name: 'css', value: 'css' },
+        { name: 'gems', value: 'gems' }
+      ]
     end
 
-    it { is_expected.to have_received(:app_path) }
-    it { is_expected.to have_received(:customizes) }
-    it { is_expected.to have_received(:database) }
-    it { is_expected.to have_received(:javascript) }
-    it { is_expected.to have_received(:css) }
-    it { is_expected.to have_received(:gems) }
+    let(:databases) do
+      %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
+    end
 
+    before do
+      allow(TTY::Prompt).to receive(:new).and_return(tty_prompt)
+      allow(Mogu::Template).to receive(:create)
+      allow(subject).to receive(:ask)
+      allow(subject).to receive(:select)
+      allow(subject).to receive(:multi_select)
+      allow(prompt).to receive(:database?).and_return(true)
+      allow(prompt).to receive(:javascript?).and_return(true)
+      allow(prompt).to receive(:css?).and_return(true)
+      allow(prompt).to receive(:gems?).and_return(true)
+      allow(prompt).to receive(:template?).and_return(true)
+
+      prompt.run
+    end
+
+    it { is_expected.to have_received(:ask).with('Please input app path', required: true) }
+    it { is_expected.to have_received(:multi_select).with('Choose customizes', customizes) }
+    it {
+      is_expected.to have_received(:select).with('Choose database', databases)
+    }
+    it { is_expected.to have_received(:select).with('Choose javascript', %w[importmap webpack esbuild rollup]) }
+    it { is_expected.to have_received(:select).with('Choose css', %w[tailwind bootstrap bulma postcss sass]) }
+    it { is_expected.to have_received(:multi_select).with('Choose gems', %w[brakeman rspec rubocop]) }
     it { expect(Mogu::Template).to have_received(:create) }
   end
 
