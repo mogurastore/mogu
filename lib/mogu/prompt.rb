@@ -51,20 +51,12 @@ module Mogu
       @result.customizes.include? 'gems'
     end
 
-    def brakeman?
-      @result.gems.include? 'brakeman'
-    end
-
     def rspec?
       @result.gems.include? 'rspec'
     end
 
-    def rubocop?
-      @result.gems.include? 'rubocop'
-    end
-
     def template?
-      [brakeman?, rspec?, rubocop?].any?
+      @result.gems.any?
     end
 
     def app_path
@@ -95,7 +87,7 @@ module Mogu
     end
 
     def gems
-      choices = %w[brakeman rspec rubocop]
+      choices = %w[brakeman solargraph rspec rubocop]
 
       @prompt.multi_select 'Choose gems', choices
     end
