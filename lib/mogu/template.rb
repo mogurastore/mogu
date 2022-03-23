@@ -23,6 +23,7 @@ module Mogu
 
     def write(gems)
       @file.write brakeman_code if gems.include? 'brakeman'
+      @file.write solargraph_code if gems.include? 'solargraph'
       @file.write rspec_code if gems.include? 'rspec'
       @file.write rubocop_code if gems.include? 'rubocop'
 
@@ -34,6 +35,12 @@ module Mogu
     def brakeman_code
       <<~CODE
         gem 'brakeman', group: :development
+      CODE
+    end
+
+    def solargraph_code
+      <<~CODE
+        gem 'solargraph', group: :development
       CODE
     end
 

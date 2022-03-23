@@ -42,7 +42,7 @@ RSpec.describe Mogu::Prompt do
     }
     it { is_expected.to have_received(:select).with('Choose javascript', %w[importmap webpack esbuild rollup]) }
     it { is_expected.to have_received(:select).with('Choose css', %w[tailwind bootstrap bulma postcss sass]) }
-    it { is_expected.to have_received(:multi_select).with('Choose gems', %w[brakeman rspec rubocop]) }
+    it { is_expected.to have_received(:multi_select).with('Choose gems', %w[brakeman solargraph rspec rubocop]) }
     it { expect(Mogu::Template).to have_received(:create) }
   end
 

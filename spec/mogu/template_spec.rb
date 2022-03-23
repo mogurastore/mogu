@@ -33,32 +33,18 @@ RSpec.describe Mogu::Template do
   describe '#write' do
     subject { described_class.new }
 
-    after do
-      subject.write gems
+    before do
+      allow(subject).to receive(:brakeman_code)
+      allow(subject).to receive(:solargraph_code)
+      allow(subject).to receive(:rspec_code)
+      allow(subject).to receive(:rubocop_code)
+
+      subject.write %w[brakeman solargraph rspec rubocop]
     end
 
-    context 'when gems is empty' do
-      let(:gems) { [] }
-
-      it { expect(subject).not_to receive(:rspec_code) }
-    end
-
-    context 'when gems include brakeman' do
-      let(:gems) { ['brakeman'] }
-
-      it { expect(subject).to receive(:brakeman_code) }
-    end
-
-    context 'when gems include rspec' do
-      let(:gems) { ['rspec'] }
-
-      it { expect(subject).to receive(:rspec_code) }
-    end
-
-    context 'when gems include rubocop' do
-      let(:gems) { ['rubocop'] }
-
-      it { expect(subject).to receive(:rubocop_code) }
-    end
+    it { is_expected.to have_received(:brakeman_code) }
+    it { is_expected.to have_received(:solargraph_code) }
+    it { is_expected.to have_received(:rspec_code) }
+    it { is_expected.to have_received(:rubocop_code) }
   end
 end
