@@ -4,8 +4,6 @@ require 'tempfile'
 
 module Mogu
   class Template
-    attr_reader :file
-
     class << self
       def create(gems)
         template = new
@@ -19,12 +17,16 @@ module Mogu
       @file = Tempfile.new
     end
 
-    def write(gems)
-      file.write brakeman_code if gems.include? 'brakeman'
-      file.write rspec_code if gems.include? 'rspec'
-      file.write rubocop_code if gems.include? 'rubocop'
+    def path
+      @file.path
+    end
 
-      file.rewind
+    def write(gems)
+      @file.write brakeman_code if gems.include? 'brakeman'
+      @file.write rspec_code if gems.include? 'rspec'
+      @file.write rubocop_code if gems.include? 'rubocop'
+
+      @file.rewind
     end
 
     private

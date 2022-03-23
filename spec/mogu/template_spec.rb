@@ -18,6 +18,18 @@ RSpec.describe Mogu::Template do
     end
   end
 
+  describe '#path' do
+    subject { described_class.new.path }
+
+    let(:tempfile) { Tempfile.new }
+
+    before do
+      allow(Tempfile).to receive(:new).and_return(tempfile)
+    end
+
+    it { is_expected.to eq tempfile.path }
+  end
+
   describe '#write' do
     subject { described_class.new }
 
