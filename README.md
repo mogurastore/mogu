@@ -8,7 +8,11 @@ CLI to create rails projects interactively.
 
 ## Features
 
-- Support for rails new option selection.
+- Support in selecting rails new options
+  - database
+  - javascript
+  - css
+- Support in adding gems
 
 ## Installation
 
