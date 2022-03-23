@@ -30,8 +30,8 @@ mogu
 Please input app path
 
 Choose customizes
-> ⬡ database
-  ⬡ javascript
+> ⬡ database (Default: sqlite3)
+  ⬡ javascript (Default: importmap)
   ⬡ css
   ⬡ gems
 
