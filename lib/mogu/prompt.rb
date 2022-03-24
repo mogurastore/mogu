@@ -4,15 +4,36 @@ require 'tty-prompt'
 
 module Mogu
   class Prompt
-    Result = Struct.new(:app_path, :customizes, :database, :javascript, :css, :gems, :template, keyword_init: true)
+    Result = Struct.new(
+      :app_path,
+      :is_api,
+      :customizes,
+      :database,
+      :javascript,
+      :css,
+      :gems,
+      :template,
+      keyword_init: true
+    )
 
     def initialize
       @prompt = TTY::Prompt.new
-      @result = Result.new(app_path: '', customizes: [], database: '', javascript: '', css: '', gems: [], template: nil)
+
+      @result = Result.new(
+        app_path: '',
+        is_api: false,
+        customizes: [],
+        database: '',
+        javascript: '',
+        css: '',
+        gems: [],
+        template: nil
+      )
     end
 
     def run
-      @result.app_path = app_path
+      @result.app_path = @prompt.ask 'Please input app path', required: true
+      @result.is_api = @prompt.yes? 'Do you want api mode?', default: false
       @result.customizes = customizes
 
       @result.database = database if database?
@@ -25,6 +46,7 @@ module Mogu
     def to_opt
       [
         @result.app_path,
+        @result.is_api ? ['--api'] : [],
         database? ? ['-d', @result.database] : [],
         javascript? ? ['-j', @result.javascript] : [],
         css? ? ['-c', @result.css] : [],
@@ -59,10 +81,6 @@ module Mogu
       @result.gems.any?
     end
 
-    def app_path
-      @prompt.ask 'Please input app path', required: true
-    end
-
     def css
       choices = %w[tailwind bootstrap bulma postcss sass]
 
@@ -70,12 +88,20 @@ module Mogu
     end
 
     def customizes
-      choices = [
-        { name: 'database (Default: sqlite3)', value: 'database' },
-        { name: 'javascript (Default: importmap)', value: 'javascript' },
-        { name: 'css', value: 'css' },
-        { name: 'gems', value: 'gems' }
-      ]
+      choices =
+        if @result.is_api
+          [
+            { name: 'database (Default: sqlite3)', value: 'database' },
+            { name: 'gems', value: 'gems' }
+          ]
+        else
+          [
+            { name: 'database (Default: sqlite3)', value: 'database' },
+            { name: 'javascript (Default: importmap)', value: 'javascript' },
+            { name: 'css', value: 'css' },
+            { name: 'gems', value: 'gems' }
+          ]
+        end
 
       @prompt.multi_select 'Choose customizes', choices
     end
