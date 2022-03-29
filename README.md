@@ -29,6 +29,8 @@ mogu
 ```bash
 Please input app path
 
+Do you want api mode? (y/N)
+
 Choose customizes
 > ⬡ database (Default: sqlite3)
   ⬡ javascript (Default: importmap)
