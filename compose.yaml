@@ -9,4 +9,5 @@ services:
 
 volumes:
   gem-credentials-data:
+    external: true
   gem-data:
