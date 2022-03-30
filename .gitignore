@@ -12,3 +12,5 @@
 
 /Gemfile.lock
 /*.gem
+
+/compose.override.yaml

@@ -3,11 +3,8 @@ services:
     image: ruby
     volumes:
       - .:/workspace
-      - gem-credentials-data:/root/.local/share/gem
       - gem-data:/usr/local/bundle
     working_dir: /workspace
 
 volumes:
-  gem-credentials-data:
-    external: true
   gem-data:
