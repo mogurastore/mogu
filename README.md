@@ -22,8 +22,18 @@ gem install mogu
 
 ## Usage
 
+## help
+
 ```bash
-mogu
+mogu help
+```
+
+## new
+
+Create rails projects interactively.
+
+```bash
+mogu new
 ```
 
 ```bash
