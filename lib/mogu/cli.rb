@@ -1,23 +1,21 @@
 # frozen_string_literal: true
 
-require 'optparse'
 require 'rails/command'
+require 'thor'
 
 module Mogu
-  class CLI
-    class << self
-      def start
-        params = OptionParser.getopts(ARGV, 'v')
+  class CLI < Thor
+    desc 'new', 'Create rails projects interactively'
+    def new
+      prompt = Mogu::Prompt.new
+      prompt.run
 
-        if params['v']
-          puts "mogu #{Mogu::VERSION}"
-        else
-          prompt = Mogu::Prompt.new
-          prompt.run
+      Rails::Command.invoke :application, ['new', *prompt.to_opt]
+    end
 
-          Rails::Command.invoke :application, ['new', *prompt.to_opt]
-        end
-      end
+    desc 'version', 'Display mogu version'
+    def version
+      puts Mogu::VERSION
     end
   end
 end
