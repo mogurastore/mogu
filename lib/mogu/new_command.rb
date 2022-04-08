@@ -15,8 +15,9 @@ module Mogu
       @database = @prompt.select 'Choose database', database_choices if database?
       @javascript = @prompt.select 'Choose javascript', javascript_choices if javascript?
       @css = @prompt.select 'Choose css', css_choices if css?
+      @skips = @prompt.multi_select 'Choose skips', skip_choices if @customizes.include? 'skips'
       @gems = @prompt.multi_select 'Choose gems', gem_choices if gems?
-      @template = Mogu::Template.create @gems if template?
+      @template = Mogu::Template.create @gems unless @gems.to_a.empty?
 
       Rails::Command.invoke :application, ['new', *to_opt]
     end
@@ -39,14 +40,6 @@ module Mogu
       @customizes.include? 'gems'
     end
 
-    def rspec?
-      @gems.include? 'rspec'
-    end
-
-    def template?
-      @gems.any?
-    end
-
     def css_choices
       %w[tailwind bootstrap bulma postcss sass]
     end
@@ -55,6 +48,7 @@ module Mogu
       if @is_api
         [
           { name: 'database (Default: sqlite3)', value: 'database' },
+          { name: 'skips', value: 'skips' },
           { name: 'gems', value: 'gems' }
         ]
       else
@@ -62,6 +56,7 @@ module Mogu
           { name: 'database (Default: sqlite3)', value: 'database' },
           { name: 'javascript (Default: importmap)', value: 'javascript' },
           { name: 'css', value: 'css' },
+          { name: 'skips', value: 'skips' },
           { name: 'gems', value: 'gems' }
         ]
       end
@@ -79,6 +74,12 @@ module Mogu
       %w[importmap webpack esbuild rollup]
     end
 
+    def skip_choices
+      [
+        { name: 'test', value: '--skip-test' }
+      ]
+    end
+
     def to_opt
       [
         @app_path,
@@ -86,8 +87,8 @@ module Mogu
         database? ? ['-d', @database] : [],
         javascript? ? ['-j', @javascript] : [],
         css? ? ['-c', @css] : [],
-        rspec? ? %w[-T] : [],
-        template? ? ['-m', @template.path] : []
+        @skips.to_a,
+        @gems.to_a.empty? ? [] : ['-m', @template.path]
       ].flatten
     end
   end

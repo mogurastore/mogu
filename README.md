@@ -12,6 +12,7 @@ CLI to create rails projects interactively.
   - database
   - javascript
   - css
+  - skips
 - Support in adding gems
 
 ## Installation
@@ -45,6 +46,7 @@ Choose customizes
 > ⬡ database (Default: sqlite3)
   ⬡ javascript (Default: importmap)
   ⬡ css
+  ⬡ skips
   ⬡ gems
 
 Choose database
@@ -65,6 +67,9 @@ Choose css
   bulma
   postcss
   sass
+
+Choose skips
+> ⬡ test
 
 Choose gems
 > ⬡ brakeman
