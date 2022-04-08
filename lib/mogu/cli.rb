@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
-require 'rails/command'
 require 'thor'
 
 module Mogu
   class CLI < Thor
     desc 'new', 'Create rails projects interactively'
     def new
-      prompt = Mogu::Prompt.new
-      prompt.run
-
-      Rails::Command.invoke :application, ['new', *prompt.to_opt]
+      Mogu::NewCommand.new.run
     end
 
     desc 'version', 'Display mogu version'

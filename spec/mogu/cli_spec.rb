@@ -4,16 +4,14 @@ RSpec.describe Mogu::CLI do
   describe '#new' do
     subject { described_class.new }
 
-    let(:prompt) { double(:prompt, run: nil, to_opt: []) }
+    let(:command) { double(:command, run: nil) }
 
     before do
-      allow(Mogu::Prompt).to receive(:new).and_return(prompt)
-      allow(Rails::Command).to receive(:invoke)
+      allow(Mogu::NewCommand).to receive(:new).and_return(command)
 
       subject.new
     end
 
-    it { expect(prompt).to have_received(:run) }
-    it { expect(Rails::Command).to have_received(:invoke).with(:application, %w[new]) }
+    it { expect(command).to have_received(:run) }
   end
 end
