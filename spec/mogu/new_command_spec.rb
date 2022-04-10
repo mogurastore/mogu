@@ -6,7 +6,6 @@ RSpec.describe Mogu::NewCommand do
 
     let(:command) { described_class.new }
     let(:prompt) { TTY::Prompt.new }
-    let(:template) { double(:template, path: 'template_path') }
 
     let(:database_choices) do
       %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
@@ -15,11 +14,9 @@ RSpec.describe Mogu::NewCommand do
     let(:javascript_choices) { %w[importmap webpack esbuild rollup] }
     let(:css_choices) { %w[tailwind bootstrap bulma postcss sass] }
     let(:skip_choices) { [{ name: 'test', value: '--skip-test' }] }
-    let(:gem_choices) { %w[brakeman solargraph rspec rubocop] }
 
     before do
       allow(TTY::Prompt).to receive(:new).and_return(prompt)
-      allow(Mogu::Template).to receive(:create).and_return(template)
       allow(Rails::Command).to receive(:invoke)
       allow(subject).to receive(:ask).with('Please input app path', required: true).and_return('app_path')
       allow(subject).to receive(:yes?).with('Do you want api mode?', default: false).and_return(is_api)
@@ -28,7 +25,6 @@ RSpec.describe Mogu::NewCommand do
       allow(subject).to receive(:select).with('Choose css', css_choices).and_return('tailwind')
       allow(subject).to receive(:multi_select).with('Choose customizes', customize_choices).and_return(customizes)
       allow(subject).to receive(:multi_select).with('Choose skips', skip_choices).and_return(%w[--skip-test])
-      allow(subject).to receive(:multi_select).with('Choose gems', gem_choices).and_return(gem_choices)
 
       command.run
     end
@@ -39,7 +35,6 @@ RSpec.describe Mogu::NewCommand do
       it { is_expected.to have_received(:multi_select).with('Choose customizes', customize_choices) }
       it { is_expected.to have_received(:select).with('Choose database', database_choices) }
       it { is_expected.to have_received(:multi_select).with('Choose skips', skip_choices) }
-      it { is_expected.to have_received(:multi_select).with('Choose gems', gem_choices) }
       it { expect(Rails::Command).to have_received(:invoke).with(:application, ['new', *options]) }
     end
 
@@ -48,12 +43,11 @@ RSpec.describe Mogu::NewCommand do
       let(:customize_choices) do
         [
           { name: 'database (Default: sqlite3)', value: 'database' },
-          { name: 'skips', value: 'skips' },
-          { name: 'gems', value: 'gems' }
+          { name: 'skips', value: 'skips' }
         ]
       end
-      let(:customizes) { %w[database skips gems] }
-      let(:options) { ['app_path', '--api', '-d', 'sqlite3', '--skip-test', '-m', 'template_path'] }
+      let(:customizes) { %w[database skips] }
+      let(:options) { ['app_path', '--api', '-d', 'sqlite3', '--skip-test'] }
 
       it_behaves_like 'check common method call'
 
@@ -68,13 +62,12 @@ RSpec.describe Mogu::NewCommand do
           { name: 'database (Default: sqlite3)', value: 'database' },
           { name: 'javascript (Default: importmap)', value: 'javascript' },
           { name: 'css', value: 'css' },
-          { name: 'skips', value: 'skips' },
-          { name: 'gems', value: 'gems' }
+          { name: 'skips', value: 'skips' }
         ]
       end
-      let(:customizes) { %w[database javascript css skips gems] }
+      let(:customizes) { %w[database javascript css skips] }
       let(:options) do
-        ['app_path', '-d', 'sqlite3', '-j', 'importmap', '-c', 'tailwind', '--skip-test', '-m', 'template_path']
+        ['app_path', '-d', 'sqlite3', '-j', 'importmap', '-c', 'tailwind', '--skip-test']
       end
 
       it_behaves_like 'check common method call'

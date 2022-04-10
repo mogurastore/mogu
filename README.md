@@ -23,13 +23,13 @@ gem install mogu
 
 ## Usage
 
-## help
+### help
 
 ```bash
 mogu help
 ```
 
-## new
+### new
 
 Create rails projects interactively.
 
@@ -47,7 +47,6 @@ Choose customizes
   ⬡ javascript (Default: importmap)
   ⬡ css
   ⬡ skips
-  ⬡ gems
 
 Choose database
 > sqlite3
@@ -70,7 +69,17 @@ Choose css
 
 Choose skips
 > ⬡ test
+```
 
+### gem
+
+Add gems to rails projects.
+
+```bash
+mogu gem
+```
+
+```bash
 Choose gems
 > ⬡ brakeman
   ⬡ solargraph
