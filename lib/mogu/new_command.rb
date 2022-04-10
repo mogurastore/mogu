@@ -16,8 +16,6 @@ module Mogu
       @javascript = @prompt.select 'Choose javascript', javascript_choices if javascript?
       @css = @prompt.select 'Choose css', css_choices if css?
       @skips = @prompt.multi_select 'Choose skips', skip_choices if @customizes.include? 'skips'
-      @gems = @prompt.multi_select 'Choose gems', gem_choices if gems?
-      @template = Mogu::Template.create @gems unless @gems.to_a.empty?
 
       Rails::Command.invoke :application, ['new', *to_opt]
     end
@@ -36,10 +34,6 @@ module Mogu
       @customizes.include? 'css'
     end
 
-    def gems?
-      @customizes.include? 'gems'
-    end
-
     def css_choices
       %w[tailwind bootstrap bulma postcss sass]
     end
@@ -48,26 +42,20 @@ module Mogu
       if @is_api
         [
           { name: 'database (Default: sqlite3)', value: 'database' },
-          { name: 'skips', value: 'skips' },
-          { name: 'gems', value: 'gems' }
+          { name: 'skips', value: 'skips' }
         ]
       else
         [
           { name: 'database (Default: sqlite3)', value: 'database' },
           { name: 'javascript (Default: importmap)', value: 'javascript' },
           { name: 'css', value: 'css' },
-          { name: 'skips', value: 'skips' },
-          { name: 'gems', value: 'gems' }
+          { name: 'skips', value: 'skips' }
         ]
       end
     end
 
     def database_choices
       %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
-    end
-
-    def gem_choices
-      %w[brakeman solargraph rspec rubocop]
     end
 
     def javascript_choices
@@ -87,8 +75,7 @@ module Mogu
         database? ? ['-d', @database] : [],
         javascript? ? ['-j', @javascript] : [],
         css? ? ['-c', @css] : [],
-        @skips.to_a,
-        @gems.to_a.empty? ? [] : ['-m', @template.path]
+        @skips.to_a
       ].flatten
     end
   end
