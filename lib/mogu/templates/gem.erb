@@ -1,0 +1,39 @@
+<% if gems.include? 'brakeman' %>
+  gem 'brakeman', group: :development
+<% end %>
+
+<% if gems.include? 'rspec' %>
+  gem 'factory_bot_rails', group: %i[development test]
+  gem 'rspec-rails', group: %i[development test]
+<% end %>
+
+<% if gems.include? 'rubocop' %>
+  gem 'rubocop-rails', group: :development, require: false
+<% end %>
+
+<% if gems.include? 'solargraph' %>
+  gem 'solargraph', group: :development
+<% end %>
+
+<% if gems.include? 'rubocop' %>
+  create_file '.rubocop.yml', <<~YML
+    require:
+      - rubocop-rails
+
+    AllCops:
+      NewCops: enable
+
+    Rails:
+      Enabled: true
+  YML
+<% end %>
+
+after_bundle do
+  <% if gems.include? 'rspec' %>
+    generate 'rspec:install'
+  <% end %>
+
+  <% if gems.include? 'rubocop' %>
+    run 'rubocop --auto-gen-config'
+  <% end %>
+end
