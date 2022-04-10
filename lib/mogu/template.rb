@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'erb'
 require 'tempfile'
 
 module Mogu
@@ -22,58 +23,9 @@ module Mogu
     end
 
     def write(gems)
-      @file.write brakeman_code if gems.include? 'brakeman'
-      @file.write solargraph_code if gems.include? 'solargraph'
-      @file.write rspec_code if gems.include? 'rspec'
-      @file.write rubocop_code if gems.include? 'rubocop'
-
+      erb = ERB.new File.read(File.expand_path('templates/gem.erb', __dir__))
+      @file.write erb.result_with_hash(gems: gems)
       @file.rewind
-    end
-
-    private
-
-    def brakeman_code
-      <<~CODE
-        gem 'brakeman', group: :development
-      CODE
-    end
-
-    def solargraph_code
-      <<~CODE
-        gem 'solargraph', group: :development
-      CODE
-    end
-
-    def rspec_code
-      <<~CODE
-        gem 'factory_bot_rails', group: %i[development test]
-        gem 'rspec-rails', group: %i[development test]
-
-        after_bundle do
-          generate 'rspec:install'
-        end
-      CODE
-    end
-
-    def rubocop_code
-      <<~CODE
-        gem 'rubocop-rails', group: :development, require: false
-
-        create_file '.rubocop.yml', <<~YML
-          require:
-            - rubocop-rails
-
-          AllCops:
-            NewCops: enable
-
-          Rails:
-            Enabled: true
-        YML
-
-        after_bundle do
-          run 'rubocop --auto-gen-config'
-        end
-      CODE
     end
   end
 end

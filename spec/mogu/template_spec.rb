@@ -31,20 +31,17 @@ RSpec.describe Mogu::Template do
   end
 
   describe '#write' do
-    subject { described_class.new }
+    subject { tempfile }
+
+    let(:tempfile) { double(:tempfile, rewind: nil, write: nil) }
 
     before do
-      allow(subject).to receive(:brakeman_code)
-      allow(subject).to receive(:solargraph_code)
-      allow(subject).to receive(:rspec_code)
-      allow(subject).to receive(:rubocop_code)
+      allow(Tempfile).to receive(:new).and_return(tempfile)
 
-      subject.write %w[brakeman solargraph rspec rubocop]
+      described_class.new.write %w[brakeman solargraph rspec rubocop]
     end
 
-    it { is_expected.to have_received(:brakeman_code) }
-    it { is_expected.to have_received(:solargraph_code) }
-    it { is_expected.to have_received(:rspec_code) }
-    it { is_expected.to have_received(:rubocop_code) }
+    it { is_expected.to have_received(:write) }
+    it { is_expected.to have_received(:rewind) }
   end
 end
