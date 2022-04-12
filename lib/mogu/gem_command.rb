@@ -1,18 +1,17 @@
 # frozen_string_literal: true
 
+require 'cli/ui'
 require 'erb'
 require 'rails/command'
 require 'tempfile'
-require 'tty-prompt'
 
 module Mogu
   class GemCommand
     def run
       erb = ERB.new File.read(File.expand_path('templates/gem.erb', __dir__))
-      prompt = TTY::Prompt.new
       template = Tempfile.new
 
-      gems = prompt.multi_select 'Choose gems', gem_choices
+      gems = ask_gems
       template.write erb.result_with_hash(gems: gems)
       template.rewind
 
@@ -23,8 +22,10 @@ module Mogu
 
     private
 
-    def gem_choices
-      %w[brakeman solargraph rspec rubocop]
+    def ask_gems
+      options = %w[brakeman solargraph rspec rubocop]
+
+      ::CLI::UI::Prompt.ask 'Choose gems', multiple: true, options: options
     end
   end
 end

@@ -2,78 +2,45 @@
 
 RSpec.describe Mogu::NewCommand do
   describe '#run' do
-    subject { prompt }
+    subject { Rails::Command }
 
     let(:command) { described_class.new }
-    let(:prompt) { TTY::Prompt.new }
-
-    let(:database_choices) do
-      %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
-    end
-
-    let(:javascript_choices) { %w[importmap webpack esbuild rollup] }
-    let(:css_choices) { %w[tailwind bootstrap bulma postcss sass] }
-    let(:skip_choices) { [{ name: 'test', value: '--skip-test' }] }
 
     before do
-      allow(TTY::Prompt).to receive(:new).and_return(prompt)
+      allow(command).to receive(:ask_app_path).and_return('app_path')
+      allow(command).to receive(:confirm_is_api).and_return(is_api)
+      allow(command).to receive(:ask_customizes).and_return(customizes)
+      allow(command).to receive(:ask_database).and_return(%w[-d sqlite3])
+      allow(command).to receive(:ask_javascript).and_return(%w[-j importmap])
+      allow(command).to receive(:ask_css).and_return(%w[-c tailwind])
+      allow(command).to receive(:ask_skips).and_return(%w[--skip-test])
       allow(Rails::Command).to receive(:invoke)
-      allow(subject).to receive(:ask).with('Please input app path', required: true).and_return('app_path')
-      allow(subject).to receive(:yes?).with('Do you want api mode?', default: false).and_return(is_api)
-      allow(subject).to receive(:select).with('Choose database', database_choices).and_return('sqlite3')
-      allow(subject).to receive(:select).with('Choose javascript', javascript_choices).and_return('importmap')
-      allow(subject).to receive(:select).with('Choose css', css_choices).and_return('tailwind')
-      allow(subject).to receive(:multi_select).with('Choose customizes', customize_choices).and_return(customizes)
-      allow(subject).to receive(:multi_select).with('Choose skips', skip_choices).and_return(%w[--skip-test])
 
       command.run
     end
 
-    shared_examples 'check common method call' do
-      it { is_expected.to have_received(:ask).with('Please input app path', required: true) }
-      it { is_expected.to have_received(:yes?).with('Do you want api mode?', default: false) }
-      it { is_expected.to have_received(:multi_select).with('Choose customizes', customize_choices) }
-      it { is_expected.to have_received(:select).with('Choose database', database_choices) }
-      it { is_expected.to have_received(:multi_select).with('Choose skips', skip_choices) }
-      it { expect(Rails::Command).to have_received(:invoke).with(:application, ['new', *options]) }
-    end
-
-    context 'when is_api is true' do
-      let(:is_api) { true }
-      let(:customize_choices) do
-        [
-          { name: 'database (Default: sqlite3)', value: 'database' },
-          { name: 'skips', value: 'skips' }
-        ]
-      end
-      let(:customizes) { %w[database skips] }
-      let(:options) { ['app_path', '--api', '-d', 'sqlite3', '--skip-test'] }
-
-      it_behaves_like 'check common method call'
-
-      it { is_expected.not_to have_received(:select).with('Choose javascript', javascript_choices) }
-      it { is_expected.not_to have_received(:select).with('Choose css', css_choices) }
-    end
-
-    context 'when is_api is false' do
+    context 'minimal customizes' do
       let(:is_api) { false }
-      let(:customize_choices) do
-        [
-          { name: 'database (Default: sqlite3)', value: 'database' },
-          { name: 'javascript (Default: importmap)', value: 'javascript' },
-          { name: 'css', value: 'css' },
-          { name: 'skips', value: 'skips' }
-        ]
-      end
+      let(:customizes) { [] }
+      let(:options) { %w[app_path] }
+
+      it { is_expected.to have_received(:invoke).with(:application, ['new', *options]) }
+    end
+
+    context 'api mode' do
+      let(:is_api) { true }
+      let(:customizes) { [] }
+      let(:options) { %w[app_path --api] }
+
+      it { is_expected.to have_received(:invoke).with(:application, ['new', *options]) }
+    end
+
+    context 'full customizes' do
+      let(:is_api) { false }
       let(:customizes) { %w[database javascript css skips] }
-      let(:options) do
-        ['app_path', '-d', 'sqlite3', '-j', 'importmap', '-c', 'tailwind', '--skip-test']
-      end
+      let(:options) { %w[app_path -d sqlite3 -j importmap -c tailwind --skip-test] }
 
-      it_behaves_like 'check common method call'
-
-      it { is_expected.to have_received(:select).with('Choose javascript', javascript_choices) }
-      it { is_expected.to have_received(:select).with('Choose css', css_choices) }
+      it { is_expected.to have_received(:invoke).with(:application, ['new', *options]) }
     end
   end
 end

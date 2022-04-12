@@ -1,81 +1,90 @@
 # frozen_string_literal: true
 
+require 'cli/ui'
 require 'rails/command'
-require 'tty-prompt'
 
 module Mogu
   class NewCommand
     def run
-      @prompt = TTY::Prompt.new
+      @app_path = ask_app_path
+      @is_api = confirm_is_api
+      customizes = ask_customizes
 
-      @app_path = @prompt.ask 'Please input app path', required: true
-      @is_api = @prompt.yes? 'Do you want api mode?', default: false
-      @customizes = @prompt.multi_select 'Choose customizes', customize_choices
-
-      @database = @prompt.select 'Choose database', database_choices if database?
-      @javascript = @prompt.select 'Choose javascript', javascript_choices if javascript?
-      @css = @prompt.select 'Choose css', css_choices if css?
-      @skips = @prompt.multi_select 'Choose skips', skip_choices if @customizes.include? 'skips'
+      @database = customizes.include?('database') ? ask_database : []
+      @javascript = customizes.include?('javascript') ? ask_javascript : []
+      @css = customizes.include?('css') ? ask_css : []
+      @skips = customizes.include?('skips') ? ask_skips : []
 
       Rails::Command.invoke :application, ['new', *to_opt]
     end
 
     private
 
-    def database?
-      @customizes.include? 'database'
+    def ask_app_path
+      ::CLI::UI::Prompt.ask 'Please input app path', allow_empty: false
     end
 
-    def javascript?
-      @customizes.include? 'javascript'
+    def confirm_is_api
+      ::CLI::UI::Prompt.confirm 'Do you want api mode?', default: false
     end
 
-    def css?
-      @customizes.include? 'css'
-    end
+    def ask_customizes
+      ::CLI::UI::Prompt.ask 'Choose customizes', multiple: true do |handler|
+        handler.option('database (Default: sqlite3)') { 'database' }
 
-    def css_choices
-      %w[tailwind bootstrap bulma postcss sass]
-    end
+        unless @is_api
+          handler.option('javascript (Default: importmap)') { 'javascript' }
+          handler.option('css') { 'css' }
+        end
 
-    def customize_choices
-      if @is_api
-        [
-          { name: 'database (Default: sqlite3)', value: 'database' },
-          { name: 'skips', value: 'skips' }
-        ]
-      else
-        [
-          { name: 'database (Default: sqlite3)', value: 'database' },
-          { name: 'javascript (Default: importmap)', value: 'javascript' },
-          { name: 'css', value: 'css' },
-          { name: 'skips', value: 'skips' }
-        ]
+        handler.option('skips') { 'skips' }
       end
     end
 
-    def database_choices
-      %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
+    def ask_database
+      options = %w[sqlite3 mysql postgresql oracle sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc]
+
+      ::CLI::UI::Prompt.ask 'Choose database' do |handler|
+        options.each do |option|
+          handler.option(option) { |s| ['-d', s] }
+        end
+      end
     end
 
-    def javascript_choices
-      %w[importmap webpack esbuild rollup]
+    def ask_javascript
+      options = %w[importmap webpack esbuild rollup]
+
+      ::CLI::UI::Prompt.ask 'Choose javascript' do |handler|
+        options.each do |option|
+          handler.option(option) { |s| ['-j', s] }
+        end
+      end
     end
 
-    def skip_choices
-      [
-        { name: 'test', value: '--skip-test' }
-      ]
+    def ask_css
+      options = %w[tailwind bootstrap bulma postcss sass]
+
+      ::CLI::UI::Prompt.ask 'Choose css' do |handler|
+        options.each do |option|
+          handler.option(option) { |s| ['-c', s] }
+        end
+      end
+    end
+
+    def ask_skips
+      ::CLI::UI::Prompt.ask 'Choose skips', multiple: true do |handler|
+        handler.option('test') { '--skip-test' }
+      end
     end
 
     def to_opt
       [
         @app_path,
-        @is_api ? ['--api'] : [],
-        database? ? ['-d', @database] : [],
-        javascript? ? ['-j', @javascript] : [],
-        css? ? ['-c', @css] : [],
-        @skips.to_a
+        @is_api ? '--api' : [],
+        @database,
+        @javascript,
+        @css,
+        *@skips
       ].flatten
     end
   end
