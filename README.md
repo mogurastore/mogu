@@ -38,37 +38,42 @@ mogu new
 ```
 
 ```bash
-Please input app path
+? Please input app path
+>
 
-Do you want api mode? (y/N)
+? Do you want api mode? (Choose with ↑ ↓ ⏎)
+> 1. no
+  2. yes
 
-Choose customizes
-> ⬡ database (Default: sqlite3)
-  ⬡ javascript (Default: importmap)
-  ⬡ css
-  ⬡ skips
+? Choose customizes (Toggle options. Choose with ↑ ↓ ⏎, filter with 'f')
+> 1. ☐ database (Default: sqlite3)
+  2. ☐ javascript (Default: importmap)
+  3. ☐ css
+  4. ☐ skips
+  0. Done
 
-Choose database
-> sqlite3
-  mysql
-  postgresql
+? Choose database (Choose with ↑ ↓ ⏎, filter with 'f')
+> 1.  sqlite3
+  2.  mysql
+  3.  postgresql
   ...
 
-Choose javascript
-> importmap
-  webpack
-  esbuild
-  rollup
+? Choose javascript (Choose with ↑ ↓ ⏎, filter with 'f')
+> 1. importmap
+  2. webpack
+  3. esbuild
+  4. rollup
 
-Choose css
-> tailwind
-  bootstrap
-  bulma
-  postcss
-  sass
+? Choose css (Choose with ↑ ↓ ⏎, filter with 'f')
+> 1. tailwind
+  2. bootstrap
+  3. bulma
+  4. postcss
+  5. sass
 
-Choose skips
-> ⬡ test
+? Choose skips (Toggle options. Choose with ↑ ↓ ⏎, filter with 'f')
+> 1. ☐ test
+  0. Done
 ```
 
 ### gem
@@ -80,11 +85,13 @@ mogu gem
 ```
 
 ```bash
-Choose gems
-> ⬡ brakeman
-  ⬡ solargraph
-  ⬡ rspec
-  ⬡ rubocop
+? Choose gems (Toggle options. Choose with ↑ ↓ ⏎, filter with 'f')
+> 1. ☐ brakeman
+  2. ☐ solargraph
+  3. ☐ rspec
+  4. ☐ rubocop
+  0. Done
+
 ```
 
 ## Development
