@@ -2,6 +2,7 @@
   "[ruby]": {
     "editor.defaultFormatter": "castwide.solargraph"
   },
+  "solargraph.completion": false,
   "solargraph.diagnostics": true,
   "solargraph.formatting": true,
   "solargraph.useBundler": true
