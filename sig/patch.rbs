@@ -1,0 +1,19 @@
+# Classes
+module CLI
+  module UI
+    class Prompt
+      def self.ask: (String, ?allow_empty: bool, ?multiple: bool, ?options: Array[String]) ?{ (untyped) -> void } -> untyped
+      def self.confirm: (String, ?default: bool) -> bool
+    end
+  end
+end
+
+module Rails
+  class Command
+    def self.invoke: (String | Symbol, ?Array[String]) -> void
+  end
+end
+
+class Thor
+  def self.desc: (String, String) -> void
+end

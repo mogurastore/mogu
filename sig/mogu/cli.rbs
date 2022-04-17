@@ -1,0 +1,10 @@
+# TypeProf 0.21.2
+
+# Classes
+module Mogu
+  class CLI < Thor
+    def gem: -> void
+    def new: -> void
+    def version: -> void
+  end
+end

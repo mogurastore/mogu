@@ -8,7 +8,7 @@ require 'tempfile'
 module Mogu
   class GemCommand
     def run
-      erb = ERB.new File.read(File.expand_path('templates/gem.erb', __dir__))
+      erb = ERB.new File.read(File.expand_path('templates/gem.erb', __dir__.to_s))
       template = Tempfile.new
 
       gems = ask_gems

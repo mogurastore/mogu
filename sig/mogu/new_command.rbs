@@ -1,0 +1,25 @@
+# TypeProf 0.21.2
+
+# Classes
+module Mogu
+  class NewCommand
+    @app_path: String
+    @is_api: bool
+    @database: Array[String]
+    @javascript: Array[String]
+    @css: Array[String]
+    @skips: Array[String]
+
+    def run: -> void
+
+    private
+    def ask_app_path: -> String
+    def confirm_is_api: -> bool
+    def ask_customizes: -> Array[String]
+    def ask_database: -> Array[String]
+    def ask_javascript: -> Array[String]
+    def ask_css: -> Array[String]
+    def ask_skips: -> Array[String]
+    def to_opt: -> Array[String]
+  end
+end
