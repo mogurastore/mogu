@@ -28,7 +28,7 @@
   YML
 <% end %>
 
-run 'bundle install'
+Bundler.original_system 'bundle install'
 
 <% if gems.include? 'rspec' %>
   generate 'rspec:install'
