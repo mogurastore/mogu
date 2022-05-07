@@ -7,4 +7,13 @@ require 'rubocop/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 RuboCop::RakeTask.new(:rubocop)
 
-task default: %i[rubocop spec]
+desc 'Run Steep check'
+task :steep do
+  require 'steep'
+  require 'steep/cli'
+
+  result = Steep::CLI.new(argv: ['check'], stdout: $stdout, stderr: $stderr, stdin: $stdin).run
+  abort 'Steep check failed' if result.nonzero?
+end
+
+task default: %i[rubocop steep spec]

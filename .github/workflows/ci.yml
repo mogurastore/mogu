@@ -16,5 +16,5 @@ jobs:
         with:
           ruby-version: 2.7
           bundler-cache: true
-      - name: Run rubocop and spec
-        run: bundle exec rake rubocop spec
+      - name: Run rake task
+        run: bundle exec rake
