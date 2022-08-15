@@ -9,6 +9,10 @@
 
 <% if gems.include? 'rubocop' %>
   gem 'rubocop-rails', group: :development, require: false
+
+  <% if gems.include? 'rspec' %>
+    gem 'rubocop-rspec', group: :development, require: false
+  <% end %>
 <% end %>
 
 <% if gems.include? 'solargraph' %>
@@ -19,6 +23,9 @@
   create_file '.rubocop.yml', <<~YML
     require:
       - rubocop-rails
+      <% if gems.include? 'rspec' %>
+      - rubocop-rspec
+      <% end %>
 
     AllCops:
       NewCops: enable
