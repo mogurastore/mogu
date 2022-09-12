@@ -36,7 +36,7 @@ module Mogu
         unless @is_api
           handler.option('javascript (Default: importmap)') { 'javascript' }
           handler.option('css') { 'css' }
-          handler.option('asset pipline (Default: asset_pipeline)') { 'asset_pipeline' }
+          handler.option('asset pipline (Default: sprokets)') { 'asset_pipeline' }
         end
 
         handler.option('skips') { 'skips' }
