@@ -13,6 +13,7 @@ RSpec.describe Mogu::NewCommand do
       allow(command).to receive(:ask_database).and_return(%w[-d sqlite3])
       allow(command).to receive(:ask_javascript).and_return(%w[-j importmap])
       allow(command).to receive(:ask_css).and_return(%w[-c tailwind])
+      allow(command).to receive(:ask_asset_pipeline).and_return(%w[-a propshaft])
       allow(command).to receive(:ask_skips).and_return(%w[--skip-test])
       allow(Rails::Command).to receive(:invoke)
 
@@ -37,8 +38,8 @@ RSpec.describe Mogu::NewCommand do
 
     context 'full customizes' do
       let(:is_api) { false }
-      let(:customizes) { %w[database javascript css skips] }
-      let(:options) { %w[app_path -d sqlite3 -j importmap -c tailwind --skip-test] }
+      let(:customizes) { %w[database javascript css asset_pipeline skips] }
+      let(:options) { %w[app_path -d sqlite3 -j importmap -c tailwind -a propshaft --skip-test] }
 
       it { is_expected.to have_received(:invoke).with(:application, ['new', *options]) }
     end

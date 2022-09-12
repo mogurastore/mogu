@@ -13,6 +13,7 @@ module Mogu
       @database = customizes.include?('database') ? ask_database : []
       @javascript = customizes.include?('javascript') ? ask_javascript : []
       @css = customizes.include?('css') ? ask_css : []
+      @asset_pipeline = customizes.include?('asset_pipeline') ? ask_asset_pipeline : []
       @skips = customizes.include?('skips') ? ask_skips : []
 
       Rails::Command.invoke :application, ['new', *to_opt]
@@ -35,6 +36,7 @@ module Mogu
         unless @is_api
           handler.option('javascript (Default: importmap)') { 'javascript' }
           handler.option('css') { 'css' }
+          handler.option('asset pipline (Default: asset_pipeline)') { 'asset_pipeline' }
         end
 
         handler.option('skips') { 'skips' }
@@ -71,6 +73,16 @@ module Mogu
       end
     end
 
+    def ask_asset_pipeline
+      options = %w[sprokets propshaft]
+
+      ::CLI::UI::Prompt.ask 'Choose asset pipline' do |handler|
+        options.each do |option|
+          handler.option(option) { |s| ['-a', s] }
+        end
+      end
+    end
+
     def ask_skips
       ::CLI::UI::Prompt.ask 'Choose skips', multiple: true do |handler|
         handler.option('test') { '--skip-test' }
@@ -84,6 +96,7 @@ module Mogu
         @database,
         @javascript,
         @css,
+        @asset_pipeline,
         *@skips
       ].flatten
     end
