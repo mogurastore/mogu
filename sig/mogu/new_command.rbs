@@ -8,6 +8,7 @@ module Mogu
     @database: Array[String]
     @javascript: Array[String]
     @css: Array[String]
+    @asset_pipline: Array[String]
     @skips: Array[String]
 
     def run: -> void
@@ -19,6 +20,7 @@ module Mogu
     def ask_database: -> Array[String]
     def ask_javascript: -> Array[String]
     def ask_css: -> Array[String]
+    def ask_asset_pipeline: -> Array[String]
     def ask_skips: -> Array[String]
     def to_opt: -> Array[String]
   end
