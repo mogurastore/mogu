@@ -2,8 +2,6 @@
 
 RSpec.describe Mogu::NewCommand do
   describe '#run' do
-    subject { Rails::Command }
-
     let(:command) { described_class.new }
 
     before do
@@ -20,28 +18,34 @@ RSpec.describe Mogu::NewCommand do
       command.run
     end
 
-    context 'minimal customizes' do
+    context 'with minimal customizes' do
       let(:is_api) { false }
       let(:customizes) { [] }
       let(:options) { %w[app_path] }
 
-      it { is_expected.to have_received(:invoke).with(:application, ['new', *options]) }
+      it 'calls Rails::Command.invoke with minimal options' do
+        expect(Rails::Command).to have_received(:invoke).with(:application, ['new', *options])
+      end
     end
 
-    context 'api mode' do
+    context 'with api mode' do
       let(:is_api) { true }
       let(:customizes) { [] }
       let(:options) { %w[app_path --api] }
 
-      it { is_expected.to have_received(:invoke).with(:application, ['new', *options]) }
+      it 'calls Rails::Command.invoke with api options' do
+        expect(Rails::Command).to have_received(:invoke).with(:application, ['new', *options])
+      end
     end
 
-    context 'full customizes' do
+    context 'with full customizes' do
       let(:is_api) { false }
       let(:customizes) { %w[database javascript css asset_pipeline skips] }
       let(:options) { %w[app_path -d sqlite3 -j importmap -c tailwind -a propshaft --skip-test] }
 
-      it { is_expected.to have_received(:invoke).with(:application, ['new', *options]) }
+      it 'calls Rails::Command.invoke with full options' do
+        expect(Rails::Command).to have_received(:invoke).with(:application, ['new', *options])
+      end
     end
   end
 end
