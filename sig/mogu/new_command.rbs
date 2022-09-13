@@ -8,7 +8,7 @@ module Mogu
     @database: Array[String]
     @javascript: Array[String]
     @css: Array[String]
-    @asset_pipline: Array[String]
+    @asset_pipeline: Array[String]
     @skips: Array[String]
 
     def run: -> void
