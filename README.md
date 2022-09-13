@@ -12,6 +12,7 @@ CLI to create rails projects interactively.
   - database
   - javascript
   - css
+  - asset pipeline
   - skips
 - Support in adding gems
 
@@ -49,7 +50,8 @@ mogu new
 > 1. ☐ database (Default: sqlite3)
   2. ☐ javascript (Default: importmap)
   3. ☐ css
-  4. ☐ skips
+  4. ☐ asset pipline (Default: sprokets)
+  5. ☐ skips
   0. Done
 
 ? Choose database (Choose with ↑ ↓ ⏎, filter with 'f')
@@ -70,6 +72,10 @@ mogu new
   3. bulma
   4. postcss
   5. sass
+
+? Choose asset pipline (Choose with ↑ ↓ ⏎, filter with 'f')
+> 1. sprokets
+  2. propshaft
 
 ? Choose skips (Toggle options. Choose with ↑ ↓ ⏎, filter with 'f')
 > 1. ☐ test
