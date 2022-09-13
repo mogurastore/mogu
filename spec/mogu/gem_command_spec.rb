@@ -4,7 +4,7 @@ RSpec.describe Mogu::GemCommand do
   describe '#run' do
     let(:command) { described_class.new }
     let(:gems) { %w[brakeman solargraph rspec rubocop] }
-    let(:tempfile) { double(:tempfile, rewind: nil, write: nil, path: 'tempfile_path') }
+    let(:tempfile) { instance_double(Tempfile, rewind: nil, write: nil, path: 'tempfile_path') }
 
     before do
       allow(command).to receive(:ask_gems).and_return(gems)

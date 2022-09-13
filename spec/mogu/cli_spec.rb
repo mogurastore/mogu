@@ -2,14 +2,14 @@
 
 RSpec.describe Mogu::CLI do
   describe '#new' do
-    subject { described_class.new }
+    subject(:cli) { described_class.new }
 
-    let(:command) { double(:command, run: nil) }
+    let(:command) { instance_double(Mogu::NewCommand, run: nil) }
 
     before do
       allow(Mogu::NewCommand).to receive(:new).and_return(command)
 
-      subject.new
+      cli.new
     end
 
     it { expect(command).to have_received(:run) }
